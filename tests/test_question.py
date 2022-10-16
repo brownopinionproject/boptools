@@ -59,7 +59,7 @@ def test_checkbox_recode(poll_03_raw_data):
                                                               output="/Users/arjunshanmugam/Desktop")
     major_values = {"White", "Asian", "Black", "Non-white Hispanic", "Prefer not to answer",
                     "Native Hawaiian/Pacific Islander", "American Indian/Alaska Native"}
-    checkbox_question.recode(major_values=major_values)
+    checkbox_question.recode(display_values=major_values)
     assert len(checkbox_question.data.columns) == 7
     assert checkbox_question.data['White'].mean() == pytest.approx(.5770, 0.005)
     assert checkbox_question.data['Asian'].mean() == pytest.approx(.3046, 0.005)
@@ -80,7 +80,7 @@ def test_checkbox_recode(poll_03_raw_data):
     major_values = {"Alcohol", "Cocaine", "Inhalants (Poppers/Whip-its)", "LSD (Acid)", "Marijuana",
                     "MDMA (Ecstasy/Molly)", "Nicotine", "Psilocybin (Psychedelic mushrooms)", "None of the above",
                     "Unsure", "Prefer not to answer"}
-    checkbox_question.recode(major_values=major_values)
+    checkbox_question.recode(display_values=major_values)
     assert len(checkbox_question.data.columns) == 11
     assert checkbox_question.data['Alcohol'].mean() == pytest.approx(0.7750, 0.005)
     assert checkbox_question.data['Marijuana'].mean() == pytest.approx(0.5042, 0.005)

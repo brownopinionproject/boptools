@@ -34,7 +34,7 @@ class BOPQuestion(ABC):
     @abstractmethod
     def plot_responses(self, weighted: bool, moe: float):
         """
-        Generate responses plot.
+        Generate raw_data_path plot.
         :param moe:
         :param weighted:
         """
@@ -47,10 +47,10 @@ class BOPCheckboxQuestion(BOPQuestion):
     """
     num_categories: int
 
-    def recode(self, major_values: set = None):
+    def recode(self, display_values: set = None):
         """
 
-        :param major_values: Pass a set of values for which this method will generate dummy variables.
+        :param display_values: Pass a set of values for which this method will generate dummy variables.
         """
         # For checkbox questions, data is a Series of comma-delimited strings. Make a series of lists, then build DF.
         data_as_lists = self.data.str.split(", ")
@@ -65,8 +65,8 @@ class BOPCheckboxQuestion(BOPQuestion):
         # Now, get unique values in checkbox question.
         unique_values = set(data_as_frame.values.flatten())
         # Restrict to specified values if requested.
-        if major_values is not None:
-            unique_values = unique_values.intersection(major_values)
+        if display_values is not None:
+            unique_values = unique_values.intersection(display_values)
 
         # Recode values.
         recoded_data = pd.DataFrame()

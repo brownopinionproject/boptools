@@ -34,7 +34,7 @@ class BOPQuestion(ABC):
     @abstractmethod
     def plot_responses(self, weighted: bool, moe: float):
         """
-        Generate responses plot.
+        Generate raw_data_path plot.
         :param moe:
         :param weighted:
         """
