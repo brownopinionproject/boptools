@@ -7,7 +7,7 @@ from boptools.results import BOPResults
 
 @pytest.fixture
 def bop_results_instance():
-    # BOPResults instance corresponding to poll 3.
+    # BOPResults instance corresponding to poll 4.
     question_types_dict = {
         "What gender do you identify with?": "MC",
         "What race(s) do you identify with?": "Checkbox",
@@ -25,10 +25,18 @@ def bop_results_instance():
     }
 
     display_values_dict = {
-        "What gender do you identify with?": {},
-        "What race(s) do you identify with?": {},
-        "What is your (intended) concentration area(s)?": {},
-        "What religious tradition(s) do you identify with?": {},
+        "What gender do you identify with?": {"Female", "Male", "Non-binary", "Prefer not to answer"},
+        "What race(s) do you identify with?": {"Asian", "American Indian/Alaska Native", "Black",
+                                               "Middle East and North Africa (MENA)",
+                                               "Native Hawaiian/Pacific Islander", "Non-white Hispanic",
+                                               "White", "Prefer not to answer"},
+        "What is your (intended) concentration area(s)?": {"Humanities/Arts",
+                                                           "Life Sciences",
+                                                           "Physical Sciences (including math CS)",
+                                                           "Social Sciences", "Unsure", "Prefer not to answer"},
+        "What religious tradition(s) do you identify with?": {"Buddhism", "Christianity", "Hinduism",
+                                                              "Islam", "Judaism", "I am agnostic",
+                                                              "I am atheist", "Unsure", "Prefer not to answer"},
 
 
     }
@@ -37,7 +45,8 @@ def bop_results_instance():
         raw_data_path="https://docs.google.com/spreadsheets/d/e/2PACX-1vQgIEKkEjNmA418oM-RkNkd_71VlsKoz97dRKy86e6MwDWE6jJw6z9XWXk3Y1kw9tEr4SnKkTX5aIeX/pub?output=csv",
         question_types=question_types_dict,
         output_location="/Users/arjunshanmugam/Desktop",
-        weighting_variable_name="What graduation class are you?")
+        weighting_variable_name="What graduation class are you?",
+        display_values_dict=display_values_dict)
 
     return bop_results
 

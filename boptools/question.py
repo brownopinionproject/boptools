@@ -73,8 +73,8 @@ class BOPCheckboxQuestion(BOPQuestion):
             unique_values = unique_values.intersection(display_values)
             # Recode 'other' values if we are choosing to display only a subset of respondent answers.
             data_as_sets = data_as_lists.apply(set)
-            recoded_data.loc[:, 'Other'] = np.where((data_as_sets - unique_values).apply(list).str.len() > 0, 1, 0)
 
+            recoded_data.loc[:, self.name + ': Other'] = np.where((data_as_sets - unique_values).apply(list).str.len() > 0, 1, 0)
         # Recode values.
         for value in unique_values:
             recoded_data.loc[:, value] = np.where(data_as_lists.str.contains(value, na=False, regex=False), 1, 0)
@@ -91,17 +91,18 @@ class BOPCheckboxQuestion(BOPQuestion):
         """
 
         if weighted:
-            filename = (self.name + '(Weighted).png').replace("/", "")
-            title = (self.name + '(Weighted).png').replace("/", "")
+            filename = (self.name + ' (Weighted).png').replace("/", "")
+            title = (self.name + ' (Weighted)').replace("/", "")
             calc = wc.Calculator(self.weighting_variable.name)
             bar_heights = []
             data_with_weights = pd.concat([self.data, self.weighting_variable], axis=1)
             for column in self.data.columns:
                 bar_heights.append(round(100 * (calc.mean(data_with_weights, column)), 2))
+            bar_heights = pd.Series(bar_heights, index=self.data.columns).sort_values(ascending=False)
         else:
-            filename = (self.name + '(Unweighted).png').replace("/", "")
-            title = (self.name + '(Unweighted).png').replace("/", "")
-            bar_heights = (self.data.mean(axis=0) * 100).round(2)
+            filename = (self.name + ' (Unweighted).png').replace("/", "")
+            title = (self.name + ' (Unweighted)').replace("/", "")
+            bar_heights = (self.data.mean(axis=0) * 100).round(2).sort_values(ascending=False)
 
         fig, ax = plt.subplots()
         ind = np.arange(self.num_categories)
@@ -109,7 +110,14 @@ class BOPCheckboxQuestion(BOPQuestion):
         ax.set_ylabel("Percent")
         ax.set_title(title)
         ax.set_xticks(ind)
-        ax.set_xticklabels(self.data.columns, rotation='vertical')
+        labels = bar_heights.index.tolist()
+        updated_labels = []
+        for label in labels:
+            if label[-5:] == "Other":
+                updated_labels.append("Other")
+            else:
+                updated_labels.append(label)
+        ax.set_xticklabels(updated_labels, rotation='vertical')
         ax.bar_label(p, label_type='edge')
 
         plt.savefig(os.path.join(self.output, filename), bbox_inches='tight')
@@ -142,16 +150,16 @@ class BOPMCQuestion(BOPQuestion):
         """
         if weighted:
             filename = (self.name + ' (Weighted).png').replace("/", "")
-            title = self.name + ' (Weighted).png'
+            title = self.name + ' (Weighted)'
             calc = wc.Calculator(self.weighting_variable.name)
             data_with_weights = pd.concat([self.data, self.weighting_variable], axis=1)
-            weighted_distribution = (calc.distribution(data_with_weights, self.name).sort_index() * 100).round(2)
+            weighted_distribution = (calc.distribution(data_with_weights, self.name).sort_values(ascending=False) * 100).round(2)
             labels = weighted_distribution.index
             bar_heights = weighted_distribution.values
         else:
             filename = (self.name + ' (Unweighted).png').replace("/", "")
-            title = self.name + ' (Unweighted).png'
-            distribution = (self.data.value_counts(normalize=True).sort_index() * 100).round(2)
+            title = self.name + ' (Unweighted)'
+            distribution = (self.data.value_counts(normalize=True).sort_values(ascending=False) * 100).round(2)
             labels = distribution.index
             bar_heights = distribution.values
 
