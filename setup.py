@@ -7,5 +7,12 @@ setup(name='boptools',
       author='Arjun Shanmugam',
       author_email='arjun_shanmugam@brown.edu',
       license='MIT',
-      pacckages=['boptools'],
+      packages=['boptools'],
+      install_requires=[
+            'pandas',
+            'numpy',
+            'matplotlib',
+            'weightedcalcs'
+      ],
+      tests_require=['pytest'],
       zip_safe=False)
