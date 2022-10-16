@@ -25,7 +25,7 @@ class BOPQuestion(ABC):
         self.weighting_variable = weighting_variable
 
     @abstractmethod
-    def recode(self):
+    def recode(self, display_values: set = None):
         """
         Recodes this question.
         """
@@ -64,15 +64,23 @@ class BOPCheckboxQuestion(BOPQuestion):
 
         # Now, get unique values in checkbox question.
         unique_values = set(data_as_frame.values.flatten())
-        # Restrict to specified values if requested.
-        if display_values is not None:
-            unique_values = unique_values.intersection(display_values)
 
         # Recode values.
         recoded_data = pd.DataFrame()
+
+        # Restrict to specified values if requested.
+        if display_values is not None:
+            unique_values = unique_values.intersection(display_values)
+            # Recode 'other' values if we are choosing to display only a subset of respondent answers.
+            data_as_sets = data_as_lists.apply(set)
+            recoded_data.loc[:, 'Other'] = np.where((data_as_sets - unique_values).apply(list).str.len() > 0, 1, 0)
+
+        # Recode values.
         for value in unique_values:
             recoded_data.loc[:, value] = np.where(data_as_lists.str.contains(value, na=False, regex=False), 1, 0)
+
         self.data = recoded_data
+
         self.num_categories = len(self.data.columns)
 
     def plot_responses(self, weighted: bool, moe: float):
@@ -107,17 +115,24 @@ class BOPCheckboxQuestion(BOPQuestion):
         plt.savefig(os.path.join(self.output, filename), bbox_inches='tight')
         plt.close(fig)
 
+
 class BOPMCQuestion(BOPQuestion):
     """
     A class that recodes, analyzes, and plots multiple choice questions.
     """
-    def recode(self):
+
+    def recode(self, display_values: set = None):
         """
         Recode multiple choice question.
         """
         # Raise error if data contains NaN values.
         if self.data.isna().sum() > 0:
             raise ValueError(f"Question \"{self.name}\" contains at least one missing response.")
+
+        # Restrict to specified values if requested.
+        if display_values is not None:
+            other_mask = ~self.data.isin(display_values)  # Mask selecting rows not in the list of display values.
+            self.data = self.data.mask(other_mask, other="Other")
 
     def plot_responses(self, weighted: bool, moe: float):
         """

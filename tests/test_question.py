@@ -40,6 +40,15 @@ def test_multiple_choice_recode(poll_03_raw_data):
     mc_question.plot_responses(weighted=True, moe=0)
     mc_question.plot_responses(weighted=False, moe=0)
 
+    new_dorm_column = poll_03_raw_data["What do you call the dorms located on Vartan Gregorian Quad?"]
+    mc_question = boptools.question.BOPMCQuestion(data=new_dorm_column,
+                                                  weighting_variable=weighting_variable,
+                                                  output="/Users/arjunshanmugam/Desktop")
+    mc_question.recode(display_values={"Greg", "New Dorm", "Vartan Gregorian Quad (A/B)", "Unsure",
+                                       "Prefer not to answer"})
+    mc_question.plot_responses(weighted=True, moe=0)
+    mc_question.plot_responses(weighted=False, moe=0)
+
 
 def test_checkbox_recode(poll_03_raw_data):
     weighting_variable = np.trunc(poll_03_raw_data['What graduation class are you?'])
@@ -57,10 +66,10 @@ def test_checkbox_recode(poll_03_raw_data):
     checkbox_question = boptools.question.BOPCheckboxQuestion(data=race_column,
                                                               weighting_variable=weighting_variable,
                                                               output="/Users/arjunshanmugam/Desktop")
-    major_values = {"White", "Asian", "Black", "Non-white Hispanic", "Prefer not to answer",
-                    "Native Hawaiian/Pacific Islander", "American Indian/Alaska Native"}
-    checkbox_question.recode(display_values=major_values)
-    assert len(checkbox_question.data.columns) == 7
+    display_values = {"White", "Asian", "Black", "Non-white Hispanic", "Prefer not to answer",
+                      "Native Hawaiian/Pacific Islander", "American Indian/Alaska Native"}
+    checkbox_question.recode(display_values=display_values)
+    assert len(checkbox_question.data.columns) == 8
     assert checkbox_question.data['White'].mean() == pytest.approx(.5770, 0.005)
     assert checkbox_question.data['Asian'].mean() == pytest.approx(.3046, 0.005)
     assert checkbox_question.data['Black'].mean() == pytest.approx(.1049, 0.005)
@@ -81,7 +90,7 @@ def test_checkbox_recode(poll_03_raw_data):
                     "MDMA (Ecstasy/Molly)", "Nicotine", "Psilocybin (Psychedelic mushrooms)", "None of the above",
                     "Unsure", "Prefer not to answer"}
     checkbox_question.recode(display_values=major_values)
-    assert len(checkbox_question.data.columns) == 11
+    assert len(checkbox_question.data.columns) == 12
     assert checkbox_question.data['Alcohol'].mean() == pytest.approx(0.7750, 0.005)
     assert checkbox_question.data['Marijuana'].mean() == pytest.approx(0.5042, 0.005)
     assert checkbox_question.data['Nicotine'].mean() == pytest.approx(0.1878, 0.005)

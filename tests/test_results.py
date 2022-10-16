@@ -25,7 +25,12 @@ def bop_results_instance():
     }
 
     display_values_dict = {
-        "What gender do you identify with?": {}
+        "What gender do you identify with?": {},
+        "What race(s) do you identify with?": {},
+        "What is your (intended) concentration area(s)?": {},
+        "What religious tradition(s) do you identify with?": {},
+
+
     }
 
     bop_results = BOPResults(
@@ -50,4 +55,7 @@ def test_produce_figures(bop_results_instance):
     """
 def test_calculate_moe(bop_results_instance):
     with pytest.raises(RuntimeError):
+        bop_results_instance.calculate_moe()
+    with pytest.raises(RuntimeError):
+        bop_results_instance.calculate_weights(truncate=True)
         bop_results_instance.calculate_moe()

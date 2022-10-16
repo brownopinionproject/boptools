@@ -81,12 +81,14 @@ class BOPResults:
 
     def calculate_moe(self, critical_value=1.96):
         """
-
+        Calculate overall margin of error for poll.
         :param critical_value: The critical value (z-score) in the margin of error formula.
         """
         # Make sure weights have already been calculated.
         if len(self.weights) == 0:
             raise RuntimeError("You must calculate weights before calculating the margin of error.")
+        if len(self.recoded_data) == 0:
+            raise RuntimeError("You must recode the data before calculating margin of error.")
 
         N = len(self.raw_data)
         design_effect = (N * sum(self.weights.pow(2))) / (sum(self.weights) ** 2)
