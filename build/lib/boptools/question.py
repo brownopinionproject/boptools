@@ -52,9 +52,8 @@ class BOPCheckboxQuestion(BOPQuestion):
 
         :param display_values: Pass a set of values for which this method will generate dummy variables.
         """
-        # For checkbox questions, data is a Series of comma-delimited strings. Make a series of lists, then build DF.
-        data_as_lists = self.data.str.split(", ")
-
+        # For checkbox questions, data is a Series of semicolon-delimited strings. Make a series of lists, then build DF.
+        data_as_lists = self.data.str.split(";")
         # Check for missing data.
         if data_as_lists.isna().sum() > 0:
             raise ValueError(f"Question \"{self.name}\" contains at least one missing response.")
@@ -77,7 +76,7 @@ class BOPCheckboxQuestion(BOPQuestion):
             recoded_data.loc[:, self.name + ': Other'] = np.where((data_as_sets - unique_values).apply(list).str.len() > 0, 1, 0)
         # Recode values.
         for value in unique_values:
-            recoded_data.loc[:, value] = np.where(data_as_lists.str.contains(value, na=False, regex=False), 1, 0)
+            recoded_data.loc[:, self.name + ": " + value] = np.where(data_as_lists.str.contains(value, na=False, regex=False), 1, 0)
 
         self.data = recoded_data
 
@@ -91,8 +90,8 @@ class BOPCheckboxQuestion(BOPQuestion):
         """
 
         if weighted:
-            filename = (self.name + ' (Weighted).png').replace("/", "")
-            title = (self.name + ' (Weighted)').replace("/", "")
+            filename = (self.name + ' (Weighted).png').replace("/", " or ")
+            title = (self.name + ' (Weighted)').replace("/", " or ")
             calc = wc.Calculator(self.weighting_variable.name)
             bar_heights = []
             data_with_weights = pd.concat([self.data, self.weighting_variable], axis=1)
@@ -100,8 +99,8 @@ class BOPCheckboxQuestion(BOPQuestion):
                 bar_heights.append(round(100 * (calc.mean(data_with_weights, column)), 2))
             bar_heights = pd.Series(bar_heights, index=self.data.columns).sort_values(ascending=False)
         else:
-            filename = (self.name + ' (Unweighted).png').replace("/", "")
-            title = (self.name + ' (Unweighted)').replace("/", "")
+            filename = (self.name + ' (Unweighted).png').replace("/", " or ")
+            title = (self.name + ' (Unweighted)').replace("/", " or ")
             bar_heights = (self.data.mean(axis=0) * 100).round(2).sort_values(ascending=False)
 
         fig, ax = plt.subplots()
@@ -113,10 +112,8 @@ class BOPCheckboxQuestion(BOPQuestion):
         labels = bar_heights.index.tolist()
         updated_labels = []
         for label in labels:
-            if label[-5:] == "Other":
-                updated_labels.append("Other")
-            else:
-                updated_labels.append(label)
+            updated_labels.append(label.replace(self.name + ": ", ""))
+
         ax.set_xticklabels(updated_labels, rotation='vertical')
         ax.bar_label(p, label_type='edge')
 
@@ -149,7 +146,7 @@ class BOPMCQuestion(BOPQuestion):
         :param moe: Margin of error.
         """
         if weighted:
-            filename = (self.name + ' (Weighted).png').replace("/", "")
+            filename = (self.name + ' (Weighted).png').replace("/", " or ")
             title = self.name + ' (Weighted)'
             calc = wc.Calculator(self.weighting_variable.name)
             data_with_weights = pd.concat([self.data, self.weighting_variable], axis=1)
@@ -157,7 +154,7 @@ class BOPMCQuestion(BOPQuestion):
             labels = weighted_distribution.index
             bar_heights = weighted_distribution.values
         else:
-            filename = (self.name + ' (Unweighted).png').replace("/", "")
+            filename = (self.name + ' (Unweighted).png').replace("/", " or ")
             title = self.name + ' (Unweighted)'
             distribution = (self.data.value_counts(normalize=True).sort_values(ascending=False) * 100).round(2)
             labels = distribution.index
