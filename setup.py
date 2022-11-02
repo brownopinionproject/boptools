@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='boptools',
-      version='0.1',
+      version='0.12',
       description='Brown Opinion Project utilities.',
       url='https://github.com/brownopinionproject/boptools/tree/main',
       author='Arjun Shanmugam',
