@@ -9,6 +9,7 @@ library(rsconnect)
 library(survey)
 library(viridis)
 library(sortable)
+library(lubridate)
 
 #Should be the only thing you have to change! Add the newest poll each time!
 all_datasets <- list(
@@ -20,7 +21,11 @@ all_datasets <- list(
   read.csv("raw_polls/Poll 06 Intake.csv"), 
   read.csv("raw_polls/Poll 07 S23 Intake Form.csv"), 
   read.csv("raw_polls/Poll 08 Intake Form.csv"), 
-  read.csv("raw_polls/BOP October 2023 Poll.csv")
+  read.csv("raw_polls/BOP October 2023 Poll.csv"), 
+  read.csv("raw_polls/BOP November 2023 Poll.csv"), 
+  read.csv("raw_polls/BOP March 2024 Poll.csv"), 
+  read.csv("raw_polls/BOP April 2024 Poll.csv"), 
+  read.csv("raw_polls/BOP October 2024 Poll.csv")
 )
 
 #formatting the column names correctly
@@ -44,7 +49,7 @@ cleansing <- function(polling_data) {
   rows = nrow(polling_data)
   
   edited_data <- polling_data %>% 
-    select(-"Timestamp") %>%
+    mutate(date = as.character(as.Date(Timestamp)), .keep = 'unused') %>%
     #Working with the gender column
     rename(gender = contains("gender")) %>%
     #for data purposes, we have to put either Female/Male for each person
@@ -86,7 +91,7 @@ raking <- function(dataset) {
   
   names(targets) <- c("gender", "year")
   
-  raking_weights <- anesrake(targets, dataset, caseid = 1:nrow(dataset), verbose = FALSE, cap = 5, choosemethod = "total", type="pctlim", pctlim=0.05, iterate = TRUE, force1 = TRUE)
+  raking_weights <- anesrake(targets, dataset, caseid = 1:nrow(dataset), verbose = FALSE, cap = 5, choosemethod = "total", type="pctlim", pctlim=0.000005, iterate = TRUE, force1 = TRUE)
   
   weights <- unname(as.vector(raking_weights[[1]]))
   
@@ -111,7 +116,7 @@ make_topline <- function(dataset, feature) {
   
   # Calculate toplines using svytable
   topline <- svytable(formula_feature, design)
-  
+
   # Convert to percentages out of the total respondents
   return(topline)
   
@@ -286,7 +291,7 @@ server <- function(input, output, session) {
       data <- data[, append(col1, input$level_order2)]
     }
     data
-  })
+  }, digits = 4)
   
   output$plot <- renderPlot({
     dataset <- cleaned_data()
