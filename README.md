@@ -1,7 +1,7 @@
 # boptools
 Brown Opinion Project utilities.
 
-To view the dashboard, go to **[this link](https://ashlab11.shinyapps.io/BOP_Crosstabs/)**
+To view the dashboard, go to **[this link](https://ashlab11.shinyapps.io/boptools/)**
 
 In the future, to change this dashboard post-poll, a person must only change the all_datasets line. Currently, it reads in all the previous polls. We want to add the newest poll at the END by changing the function call to look like this:
 
