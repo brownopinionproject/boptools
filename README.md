@@ -7,8 +7,8 @@ In the future, to change this dashboard post-poll, a person must only change the
 
 ```r
 all_datasets <- list(
-... <other previous datasets>, 
-read.csv("raw_polls/<NEW_DATASET_NAME>")
+    <other previous datasets>..., 
+    read.csv("raw_polls/<NEW_DATASET_NAME>")
 )
 ```
 

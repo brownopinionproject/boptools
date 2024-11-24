@@ -9,3 +9,4 @@
 
 # Data for the app (might contain secrets, so I removed it for that purpose)
 rsconnect
+.Rproj.user
