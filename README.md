@@ -8,6 +8,8 @@ To add a new poll to the dashboard, you'll first need [clone this repository](ht
 
 Then download the dataset straight from the Google Form as a `.csv` (do not export it to Sheets first) by clicking "Responses", the three dots on the top right, and then "Download responses (.csv)". 
 
+For the `.csv`, ensure that none of the questions (i.e. the first row of data) besides the demographics ones contain the keywords "gender", "race", "orientation", "concentration", or "graduation" - the inclusion of these keywords are used to determine which question is a demographics question.
+
 Then add the new `.csv` file inside the `raw_polls` folder. You'll then want to make sure that the app imports the new data - in `app.R`, you'll need to change the `all_datasets` line:
 ```r
 all_datasets <- list(
