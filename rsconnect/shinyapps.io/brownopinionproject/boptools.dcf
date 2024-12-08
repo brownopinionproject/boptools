@@ -1,0 +1,10 @@
+name: boptools
+title:
+username: brownopinionproject
+account: brownopinionproject
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 13552487
+bundleId: 9483639
+url: https://brownopinionproject.shinyapps.io/boptools/
+version: 1
