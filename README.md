@@ -10,7 +10,7 @@ Then download the dataset straight from the Google Form as a `.csv` (do not expo
 
 For the `.csv`, ensure that none of the questions (i.e. the first row of data) besides the demographics ones contain the keywords "gender", "race", "orientation", "concentration", or "graduation" - the inclusion of these keywords are used to determine which question is a demographics question.
 
-Then add the new `.csv` file inside the `raw_polls` folder. You'll then want to make sure that the app imports the new data - in `app.R`, you'll need to change the `all_datasets` line:
+Then add the new `.csv` file inside the `raw_polls` folder. You'll then want to make sure that the app imports the new data - in `app.R`, you'll need to add to the `all_datasets` line:
 ```r
 all_datasets <- list(
     <other previous datasets>
@@ -22,10 +22,10 @@ all_datasets <- list(
 Then you'll need to deploy the app, either through ShinyApps or Github pages:
 
 ### ShinyApps deployment
-Open up the R console (see the set-up section below for instructions) and run the following 2 commands:
+Open up the R console (make sure you've already performed the set-up per the section below; see that section as well if you need a refresher on how to open the console) and run the following 2 commands:
 ```r
-> library(rsconnect)
-> rsconnect::deployApp()
+library(rsconnect)
+rsconnect::deployApp(appFiles = c("app.R", list.files("raw_polls", recursive = TRUE, full.names = TRUE)))
 ```
 
 ### Github pages deployment (backup)
@@ -40,7 +40,7 @@ Then commit and push the changes to the repository - Github will automatically t
 
 ## R Set-up
 
-You'll first want to [install R](https://cran.rstudio.com/)! Then, you'll want to [clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) and open up the R console in your IDE of choice. Instructions are given below for using [VSCode](https://code.visualstudio.com/) and [RStudio](https://posit.co/download/rstudio-desktop/).
+You'll first want to [install R](https://cran.rstudio.com/)! (As of March 2025, it appears that ShinyApps only supports up to R version 4.4.1, so try to install that or an earlier version.) Then, you'll want to [clone the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) and open up the R console in your IDE of choice. Instructions are given below for using [VSCode](https://code.visualstudio.com/) and [RStudio](https://posit.co/download/rstudio-desktop/).
 
 ### VSCode
 
@@ -52,7 +52,7 @@ After opening the repository in RStudio, the console will appear as a window on 
 
 ### Installing dependencies and setting up ShinyApps
 
-Once you have an R console open, you'll want to install any dependencies used by the dashboard and deployment. To do so, run the following command in your terminal
+Once you have an R console open, you'll want to install any dependencies used by the dashboard and for its deployment. To do so, run the following command in your terminal
 ```
 install.packages(c("anesrake", "pollster", "tidyverse", "stringr", "rlang", "ggplot2", "shiny", "rsconnect", "survey", "viridis", "sortable", "lubridate", "shinylive"))
 ```
