@@ -54,7 +54,7 @@ After opening the repository in RStudio, the console will appear as a window on 
 
 Once you have an R console open, you'll want to install any dependencies used by the dashboard and for its deployment. To do so, run the following command in your terminal
 ```
-install.packages(c("anesrake", "pollster", "tidyverse", "stringr", "rlang", "ggplot2", "shiny", "rsconnect", "survey", "viridis", "sortable", "lubridate", "shinylive"))
+install.packages(c("anesrake", "pollster", "tidyverse", "dplyr", "tidyr", "stringr", "rlang", "ggplot2", "shiny", "rsconnect", "survey", "viridis", "sortable", "lubridate", "shinylive"))
 ```
 
 You'll then need to provide the `rsconnect` package with authorization to deploy to BOP's ShinyApps account. To do so, log in to [ShinyApps](https://www.shinyapps.io/) using BOP's Google account (`brownopinionproject.pres@gmail.com`). Then click "Account" on the bar in the top left, and then "Tokens" in the dropdown menu that appears. You should see a list containing one authentication token - click "Show" for that token, and then follow the steps it provides. Now you're all set to deploy changes to the dashboard!
