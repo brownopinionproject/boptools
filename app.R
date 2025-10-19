@@ -30,7 +30,8 @@ all_datasets <- list(
   read.csv("raw_polls/BOP October 2024 Poll.csv"),
   read.csv("raw_polls/BOP November 2024 Poll.csv"),
   read.csv("raw_polls/BOP March 2025 Poll.csv"),
-  read.csv("raw_polls/BOP April 2025 Poll.csv")
+  read.csv("raw_polls/BOP April 2025 Poll.csv"),
+  read.csv("raw_polls/BOP October 2025 Poll.csv")
 )
 
 # formatting the column names correctly

@@ -5,6 +5,6 @@ account: brownopinionproject
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 13552487
-bundleId: 10187595
+bundleId: 11053842
 url: https://brownopinionproject.shinyapps.io/boptools/
 version: 1
