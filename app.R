@@ -35,7 +35,8 @@ poll_file_paths <- c(
   "raw_polls/BOP April 2025 Poll.csv",
   "raw_polls/BOP October 2025 Poll.csv",
   "raw_polls/BOP November 2025 Poll Coded.csv",
-  "raw_polls/BOP March 2026 Poll.csv"
+  "raw_polls/BOP March 2026 Poll.csv",
+  "raw_polls/BOP October 2026 Poll.csv"
 )
 
 # Standardized poll display names — update dates for early unnumbered polls if known
@@ -58,7 +59,8 @@ poll_display_names <- c(
   "Poll #16 — April 2025",
   "Poll #17 — October 2025",
   "Poll #18 — November 2025",
-  "Poll #19 — March 2026"
+  "Poll #19 — March 2026",
+  "Poll #20 — October 2026"
 )
 
 all_datasets <- lapply(poll_file_paths, read.csv)
